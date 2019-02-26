@@ -96,7 +96,7 @@ def webhook():
         data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showResources()}
         url = 'https://api.ciscospark.com/v1/messages'
         requests.post(url, data, headers={'Authorization': key})
-    
+
     if message_details["text"][0:8] == "quiztime":
         createQuizRoom(user_id)
     if message_details["roomId"] in quiz_rooms and user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU':
