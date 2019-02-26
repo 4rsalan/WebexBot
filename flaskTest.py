@@ -20,6 +20,14 @@ quiz_rooms = {}
 key = 'Bearer NWQ3YzQyYmQtYTQ2Yy00MDUxLWI5ZGUtM2M5ZmY3Y2MwNWE4MmU1NDkyZjYtMjE2_PF84_consumer'
 bot_key = 'MTY0NWMyYjctMTliNi00ZjBjLWE5MDgtMzU5NWNlMjM5NDZlYTM1NTRkYjMtODYx_PF84_consumer'
 
+def showQuizOptions(message):
+    data = "Add Quiz \n" + "View Quizzes"
+    url = 'https://api.ciscospark.com/v1/messages'
+    requests.post(url, data, headers={'Authorization': key})
+
+    message_details = requests.get(url, headers={'Authorization': key}).json()
+
+
 def createQuizRoom(user_id):
     #create room
 
@@ -29,7 +37,7 @@ def createQuizRoom(user_id):
     #print (json_data)
     user_name = json_data["displayName"]
     url = 'https://api.ciscospark.com/v1/rooms'
-    data = {'title' : 'Quiz Time for  ' + user_name, 'teamId' : 'Y2lzY29zcGFyazovL3VzL1RFQU0vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk'}
+    data = {'title' : 'Quiz Time for  ' + user_name, 'teamId': 'Y2lzY29zcGFyazovL3VzL1RFQU0vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk'}
     room_data = requests.post(url, data, headers={'Authorization': key})
     json_data = room_data.json()
     print (json_data)
@@ -86,29 +94,29 @@ def webhook():
     #print(message_details)
     #if user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS9kYzk1M2FmNi0zMjhiLTQ4NzItYTNjNC02YzgxZWIwYzkwZDE':
     #if user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU'
-    if message_details["text"] == "Show Menu":
-
+    if message_details["text"] == "Menu" or message_details["text"] == "menu":
         data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showMenu()}
         url = 'https://api.ciscospark.com/v1/messages'
         requests.post(url, data, headers={'Authorization': key})
 
-    if message_details["text"] == "Resources":
-        data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showResources()}
+    if message_details["text"] == "Resources" or message_details["text"] == "Resources":
+        data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showResources(myclient)}
         url = 'https://api.ciscospark.com/v1/messages'
         requests.post(url, data, headers={'Authorization': key})
+
+    if message_details["text"] == "Quizzes" or message_details["text"] == "quizzes":
+        showQuizOptions()
 
     if message_details["text"][0:8] == "quiztime":
         createQuizRoom(user_id)
     if message_details["roomId"] in quiz_rooms and user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU':
         print (user_id)
-        checkAnswer(message_details["roomId"],message_details["text"])
+        checkAnswer(message_details["roomId"], message_details["text"])
     return "Success!"
 
 
 app.run(host='localhost', port=88)
 
 #myclient["teamtrees"]["quizes"].insert_one({"id":2,"mark":3})
-
-
 
 
