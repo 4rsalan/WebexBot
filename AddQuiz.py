@@ -12,6 +12,7 @@ def valAnswer(input, numAns):
     for check in range(numAns):
         if(input == answerCheck):
             return True
+        #increments character value for the answer check
         answerCheck = chr(ord(answerCheck)+1)
     return False
 
