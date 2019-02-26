@@ -1,3 +1,8 @@
+import pymongo
+import requests
+import ast
+
+myclient = pymongo.MongoClient("mongodb://Admin:TeamTrees11!@ds351455.mlab.com:51455/teamtrees")
 def valInput(input):
     #Checks for valid integer input.
     try:
@@ -15,6 +20,15 @@ def valAnswer(input, numAns):
         #increments character value for the answer check
         answerCheck = chr(ord(answerCheck)+1)
     return False
+
+def addQuizDB(mongoValue, qList, qName):
+    mongoValue["teamtrees"]["quizTemplates"].insert_one({qName: qList})
+
+def readDB(mongoValue):
+    quizT = []
+    for q in mongoValue['teamtrees']['quizTemplates'].find():
+        quizT.append(q)
+    return quizT[0]['Quiz 1']
 
 def addQuiz():
     print("---Add Quiz---")
@@ -48,5 +62,20 @@ def addQuiz():
             #invalid input
             correct = input("Please select one of the entered answers")
         #enters entry into dictionary to be read by bot
-        qList[qSet] = {'question':questString}, {'answer':correct}
+        qList[str(qSet)] = {'question':questString}, {'answer':correct}
     return qList
+
+#qL = addQuiz()
+
+#addQuizDB(myclient, qL, 'Quiz1')
+x = ast.literal_eval(readDB(myclient))
+count = 0
+for y in x:
+    print(x[y][0])
+    qPrint = str(x[y][0])
+    print(qPrint[14:len(qPrint)-2])
+    ans = input('what is the answer?')
+    z = str(x[0][1])
+    if ans.upper() == z[12]:
+        count += 1
+print(count)
