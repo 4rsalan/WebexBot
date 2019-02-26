@@ -16,8 +16,9 @@ from flask import Flask, request
 app = Flask(__name__)
 
 quiz_rooms = {}
+quiz_users = {}
 key = 'Bearer MzJhMmE2MDMtOWQ2MS00YTM4LWE1M2EtZWI1YTEzOTgxM2Y5ZDlmMDhjMmYtNzNj_PF84_consumer'
-bot_key = 'MTY0NWMyYjctMTliNi00ZjBjLWE5MDgtMzU5NWNlMjM5NDZlYTM1NTRkYjMtODYx_PF84_consumer'
+bot_key = 'NWQ3YzQyYmQtYTQ2Yy00MDUxLWI5ZGUtM2M5ZmY3Y2MwNWE4MmU1NDkyZjYtMjE2_PF84_consumer'
 
 def createQuizRoom(user_id):
     #create room
@@ -27,12 +28,13 @@ def createQuizRoom(user_id):
     json_data = requests.get(url, headers = {'Authorization': key}).json()
     #print (json_data)
     user_name = json_data["displayName"]
-    url = 'https://api.ciscospark.com/v1/rooms'
-    data = {'title' : 'Quiz Time for  ' + user_name, 'teamId' : 'Y2lzY29zcGFyazovL3VzL1RFQU0vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk'}
+    #userId= json_data["userId"]
+    url = 'https://api.ciscospark.com/v1/messages'
+    data = {'toPersonId': user_id, 'text': 'Welcome to quiz', 'teamId' : 'Y2lzY29zcGFyazovL3VzL1RFQU0vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk'}
     room_data = requests.post(url, data, headers={'Authorization': key})
     json_data = room_data.json()
     print (json_data)
-    roomId = json_data['id']
+    roomId = json_data['roomId']
     quiz_rooms.update({roomId:quiz.quiz()})
     askquestion(roomId)
 
@@ -92,7 +94,7 @@ def webhook():
             quizresults += str(quiz) + '\n'
             #user_input = input("say something ")
             '''
-
+        print (message_details)
 
 
         data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': "You Said "+ message_details["text"][6:]}
@@ -100,11 +102,14 @@ def webhook():
         url = 'https://api.ciscospark.com/v1/messages'
         requests.post(url, data, headers={'Authorization': key})
 
+
     if message_details["text"][0:8] == "quiztime":
         createQuizRoom(user_id)
+        
     if message_details["roomId"] in quiz_rooms and user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU':
         print (user_id)
         checkAnswer(message_details["roomId"],message_details["text"])
+        
     return "Success!"
 
 
