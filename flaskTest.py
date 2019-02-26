@@ -6,6 +6,7 @@ import time
 import pymongo
 from webexteamssdk import WebexTeamsAPI, Webhook
 import quiz
+from functions import *
 
 from flask import Flask, request
 
@@ -16,7 +17,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 quiz_rooms = {}
-key = 'Bearer MzJhMmE2MDMtOWQ2MS00YTM4LWE1M2EtZWI1YTEzOTgxM2Y5ZDlmMDhjMmYtNzNj_PF84_consumer'
+key = 'Bearer NWQ3YzQyYmQtYTQ2Yy00MDUxLWI5ZGUtM2M5ZmY3Y2MwNWE4MmU1NDkyZjYtMjE2_PF84_consumer'
 bot_key = 'MTY0NWMyYjctMTliNi00ZjBjLWE5MDgtMzU5NWNlMjM5NDZlYTM1NTRkYjMtODYx_PF84_consumer'
 
 def createQuizRoom(user_id):
@@ -33,7 +34,7 @@ def createQuizRoom(user_id):
     json_data = room_data.json()
     print (json_data)
     roomId = json_data['id']
-    quiz_rooms.update({roomId:quiz.quiz()})
+    quiz_rooms.update({roomId: quiz.quiz()})
     askquestion(roomId)
 
 def checkAnswer(roomId, message):
@@ -85,21 +86,17 @@ def webhook():
     #print(message_details)
     #if user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS9kYzk1M2FmNi0zMjhiLTQ4NzItYTNjNC02YzgxZWIwYzkwZDE':
     #if user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU'
-    if message_details["text"][0:6] == "repeat":
-        '''
-        quizresults =""
-        for quiz in myclient["teamtrees"]["quizes"].find():
-            quizresults += str(quiz) + '\n'
-            #user_input = input("say something ")
-            '''
+    if message_details["text"] == "Show Menu":
 
-
-
-        data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': "You Said "+ message_details["text"][6:]}
-
+        data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showMenu()}
         url = 'https://api.ciscospark.com/v1/messages'
         requests.post(url, data, headers={'Authorization': key})
 
+    if message_details["text"] == "Resources":
+        data = {'roomId': 'Y2lzY29zcGFyazovL3VzL1JPT00vZjBiMzA4ODAtMzkyYy0xMWU5LTgzYmMtMDE5MWQ3YmY4ZTNk', 'text': showResources()}
+        url = 'https://api.ciscospark.com/v1/messages'
+        requests.post(url, data, headers={'Authorization': key})
+    
     if message_details["text"][0:8] == "quiztime":
         createQuizRoom(user_id)
     if message_details["roomId"] in quiz_rooms and user_id != 'Y2lzY29zcGFyazovL3VzL1BFT1BMRS84MjU0YjA0MS05YzJmLTQ2ZjMtOGFmMC02ZTU4MjhhMjAwMTU':
