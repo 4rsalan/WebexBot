@@ -1,11 +1,19 @@
+import pymongo
+import ast
+myclient = pymongo.MongoClient("mongodb://Admin:TeamTrees11!@ds351455.mlab.com:51455/teamtrees")
+from AddQuiz import readDB
 class quiz:
-    question = {
+    '''question = {
         0:{'question':'What is 5+4?   A:7   B:54   C:9   D:11', 'answer':'C'},
         1:{'question':'What is 12 / 3?   A:3   B:4   C:9   D:2', 'answer':'B'},
         2:{'question':'What is 6-5?   A:0   B:3   C:2   D:1', 'answer':'C'},
         3:{'question':'What is 3*7?   A:21   B:14   C:23   D:19', 'answer':'A'},
         4:{'question':'What is 8+7?   A:15   B:14   C:17   D:13', 'answer':'A'}
-    }
+    }'''
+
+
+
+    question = ast.literal_eval(readDB(myclient))
 
     def __init__ (self):
         self.questNum = 0
