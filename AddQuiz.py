@@ -72,6 +72,8 @@ def getBotQ(question):
 
 #addQuizDB(myclient, qL, 'Quiz1')
 
+
+
 x = readDB(myclient)
 print(x)
 x = ast.literal_eval(str(x))
@@ -81,7 +83,7 @@ for y in x:
     qPrint = str(x[y][0])
     print(qPrint[14:len(qPrint)])
     ans = input('what is the answer?')
-    z = str(x[0][1])
-    if ans.upper() == z[12]:
+    z = str(x[y][1])
+    if ans.upper() == z:
         count += 1
 print(count)
