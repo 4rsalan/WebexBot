@@ -28,7 +28,7 @@ def readDB(mongoValue):
     quizT = []
     for q in mongoValue['teamtrees']['quizTemplates'].find():
         quizT.append(q)
-    return quizT[0]['Quiz 1']
+    return quizT[0]['Quiz1']
 
 def addQuiz():
     print("---Add Quiz---")
@@ -65,15 +65,21 @@ def addQuiz():
         qList[str(qSet)] = {'question':questString}, {'answer':correct}
     return qList
 
+def getBotQ(question):
+    print("hello")
+
 #qL = addQuiz()
 
 #addQuizDB(myclient, qL, 'Quiz1')
-x = ast.literal_eval(readDB(myclient))
+
+x = readDB(myclient)
+print(x)
+x = ast.literal_eval(str(x))
 count = 0
 for y in x:
     print(x[y][0])
     qPrint = str(x[y][0])
-    print(qPrint[14:len(qPrint)-2])
+    print(qPrint[14:len(qPrint)])
     ans = input('what is the answer?')
     z = str(x[0][1])
     if ans.upper() == z[12]:
